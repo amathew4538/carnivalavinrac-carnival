@@ -3,29 +3,29 @@ namespace SpriteKind {
     export const selection = SpriteKind.create()
 }
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (!(pplayer.y - 32 < 17)) {
-        pplayer.y = pplayer.y - 32
+    if (!(selection.y - 32 < 19)) {
+        selection.y = selection.y - 32
     }
 })
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (!(pplayer.x - 50 < 30)) {
-        pplayer.x = pplayer.x - 50
+    if (!(selection.x - 50 < 28)) {
+        selection.x = selection.x - 50
     }
 })
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (!(pplayer.x + 50 > 130)) {
-        pplayer.x = pplayer.x + 50
+    if (!(selection.x + 50 > 128)) {
+        selection.x = selection.x + 50
     }
 })
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (!(pplayer.y + 32 > 81)) {
-        pplayer.y = pplayer.y + 32
+    if (!(selection.y + 32 > 83)) {
+        selection.y = selection.y + 32
     }
 })
 let Randx = 0
 let randY = 0
-let pplayer: Sprite = null
-pplayer = sprites.create(img`
+let selection: Sprite = null
+let pplayer = sprites.create(img`
     . . . . . . . . . . b 5 b . . . 
     . . . . . . . . . b 5 b . . . . 
     . . . . . . b b b b b b . . . . 
@@ -43,37 +43,13 @@ pplayer = sprites.create(img`
     . . . . c c d d d 5 5 5 b b . . 
     . . . . . . c c c c c b b . . . 
     `, SpriteKind.Player)
-let hammer = sprites.create(img`
-    ...............bbbbbbbbbbbbbbbbbbb...............
-    ...........bbbbdd111111111111111ddbbbb...........
-    ........bbbd1111111111111111111111111dbbb........
-    ......bbd11111111dddddddddddddd111111111dbb......
-    ....bbd1111111ddd11111111111111dddd1111111dbb....
-    ...bd111111ddd111111111111111111111ddd111111db...
-    ..bd11111ddd111ddddddddddddddddddd111ddd11111db..
-    .bd11111dd111dddd111111111111111dddd111dd11111db.
-    .b11111d111ddd111111111111111111111ddd111d11111b.
-    bd11111d1ddd1111111111111111111111111ddd1111111db
-    b11111d1ddd111111111111111111111111111ddd1d11111b
-    b11111ddddd111111111111111111111111111ddddd11111b
-    b11111ddddd111111111111111111111111111dddbd11111b
-    b111111dddd111111111111111111111111111dddb111111b
-    bd111111dddd1111111111111111111111111dddbd11111db
-    .b1111111dddd11111111111111111111111dddbd111111b.
-    .bd1111111dbbdd1111111111111111111dddbbd111111db.
-    ..bd11111111dbbdd111111111111111dddbbd1111111db..
-    ...bd111111111dbbbbbbdddddddddddddd111111111db...
-    ....bbd11111111111dbbbbbbbbbddd11111111111dbb....
-    ......bbdd11111111111111111111111111111ddbb......
-    ........bbbdd11111111111111111111111ddbbb........
-    ...........bbbbbddd11111111111dddbbbbb...........
-    ................bbbbbbbbbbbbbbbbb................
-    `, SpriteKind.hammer)
-let selection = sprites.create(assets.image`myImage0`, SpriteKind.selection)
+let hammer = sprites.create(assets.image`myImage1`, SpriteKind.hammer)
+hammer.setPosition(300, 0)
+selection = sprites.create(assets.image`myImage0`, SpriteKind.selection)
 pplayer.setPosition(30, 81)
-selection.setPosition(30, 81)
-let x = [30, 80, 130]
-let y = [81, 49, 17]
+selection.setPosition(28, 83)
+let x = [48, 98, 148]
+let y = [84, 52, 20]
 scene.setBackgroundImage(img`
     6666677777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777766666
     6666677777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777766666
@@ -196,7 +172,7 @@ scene.setBackgroundImage(img`
     ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
     ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
     `)
-game.onUpdateInterval(5000, function () {
+game.onUpdateInterval(2000, function () {
     randY = randint(0, 2)
     Randx = randint(0, 2)
     hammer.setPosition(x[Randx], y[randY])
