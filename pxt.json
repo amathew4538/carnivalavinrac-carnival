@@ -16,6 +16,11 @@
         "CollisionHandler.ts",
         "images.g.jres",
         "images.g.ts"
+        "main.py",
+        "images.g.jres",
+        "images.g.ts",
+        "tilemap.g.jres",
+        "tilemap.g.ts"
     ],
     "testFiles": [
         "test.ts"
@@ -46,4 +51,5 @@
         "#91463d",
         "#000000"
     ]
+    "preferredEditor": "blocksprj"
 }
