@@ -6,9 +6,7 @@
 
 enum MyEnum {
     //% block="one"
-    One,
-    //% block="two"
-    Two
+    One
 }
 
 /**
@@ -16,23 +14,115 @@ enum MyEnum {
  */
 //% weight=100 color=#0fbc11 icon=""
 namespace bottleStack {
-    /**
-     * TODO: describe your function here
-     * @param n describe parameter here, eg: 5
-     * @param s describe parameter here, eg: "Hello"
-     * @param e describe parameter here
-     */
+    let currentBottle: Sprite = null
+    let speed = 500
+    let baseball: Sprite = null
+    let countdown = 0
+    let bottleCount = 0
+    let baseballCount = 0
+
     //% block
-    export function foo(n: number, s: string, e: MyEnum): void {
-        // Add code here
+    export function startBottleStack() {
+        scene.setBackgroundImage(assets.image`Background`)
+        let table = sprites.create(assets.image`Table`, SpriteKind.Food)
+        table.setPosition(80, 114)
+        info.setLife(3)
+
+        spawnBottle()
+        spawnBall()
+
+        game.onUpdateInterval(speed, function () {
+            if (currentBottle) {
+                currentBottle.y += (1 * (bottleCount/4))
+            }
+
+
+
+            if (baseball) {
+                if (baseball.scale > 0.5) {
+                    scaling.scaleByPercent(baseball, -1 * bottleCount, ScaleDirection.Uniformly, ScaleAnchor.Middle)
+                }
+
+                console.log("Baseball Scale: " + baseball.scale)
+
+                if (baseball.scale <= 0.5) {
+                    countdown++
+
+                    let hitSomething = baseball.overlapsWith(currentBottle)
+
+                    for (let bottle of sprites.allOfKind(SpriteKind.Food)) {
+                        if (baseball.overlapsWith(bottle)) {
+                            hitSomething = true
+                            break
+                        }
+                    }
+
+                    if (hitSomething) {
+                        info.changeLifeBy(-1)
+                        baseball.destroy()
+                        spawnBall()
+                        countdown = 0
+                        console.log("Hit!")
+                        console.log("Baseball Count: " + baseballCount)
+                    } else if (countdown >= 5) {
+                        baseball.destroy()
+                        spawnBall()
+                        countdown = 0
+                        console.log("Miss :(")
+                        console.log("Baseball Count: " + baseballCount)
+                    }
+                }
+            }
+        })
+
+        sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
+            spawnNewBottle(sprite)
+            bottleCount++
+            console.log("Bottles Stacked: " + bottleCount)
+        })
+
+        sprites.onOverlap(SpriteKind.Player, SpriteKind.Player, function (sprite, otherSprite) {
+            if (otherSprite != currentBottle) {
+                spawnNewBottle(sprite)
+                bottleCount++
+                console.log("Bottles Stacked: " + bottleCount)
+            }
+        })
     }
 
-    /**
-     * TODO: describe your function here
-     * @param value describe value here, eg: 5
-     */
-    //% block
-    export function fib(value: number): number {
-        return value <= 1 ? value : fib(value -1) + fib(value - 2);
+    export function spawnNewBottle(bottle: Sprite) {
+        bottle.vy = 0
+        bottle.setKind(SpriteKind.Food)
+        currentBottle = null
+        spawnBottle()
     }
+
+    export function spawnBottle() {
+        let random_number = Math.randomRange(1, 10)
+        if (random_number <= 5) {
+            currentBottle = sprites.create(assets.image`Milk`, SpriteKind.Player)
+        } else {
+            currentBottle = sprites.create(assets.image`Water Bottle`, SpriteKind.Player)
+        }
+        currentBottle.setPosition(80, 10)
+    }
+
+    export function spawnBall(){
+        baseball = sprites.create(assets.image`Baseball`, SpriteKind.Projectile)
+        
+        baseball.setPosition(Math.randomRange(30, 130), Math.randomRange(30, 100))
+        scaling.scaleToPercent(baseball, 100, ScaleDirection.Uniformly, ScaleAnchor.Middle)
+    }
+
+    controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
+        if (currentBottle) currentBottle.x -= 2
+    })
+
+    controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
+        if (currentBottle) currentBottle.x += 2
+    })
+
+    controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
+        if (currentBottle) currentBottle.y += 2
+    })
 }
